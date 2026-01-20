@@ -65,7 +65,7 @@ extension DirectoryContainsExtension on Directory {
   Future<bool> contains(
     FileSystemEntity entity, {
     bool recursive = false,
-  }) async {
+  }) {
     final entities = list(recursive: recursive);
     return entities.any(
       (element) => FileSystemEntity.identicalSync(entity.path, element.path),

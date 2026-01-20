@@ -84,16 +84,6 @@ extension IterableElementAtOrElse<E> on Iterable<E> {
   }
 }
 
-extension IterableFirstOrNull<E> on Iterable<E> {
-  /// First element or `null` if the collection is empty.
-  ///
-  /// ```dart
-  /// final first = [1, 2, 3, 4].firstOrNull; // 1
-  /// final emptyFirst = [].firstOrNull; // null
-  /// ```
-  E? get firstOrNull => isNotEmpty ? first : null;
-}
-
 extension IterableFirstOrDefault<E> on Iterable<E> {
   /// First element or `defaultValue` if the collection is empty.
   ///
@@ -121,20 +111,9 @@ extension IterableFirstOrNullWhere<E> on Iterable<E> {
   }
 }
 
-extension IterableLastOrNull<E> on Iterable<E> {
-  /// Last element or `null` if the collection is empty.
-  ///
-  /// ```dart
-  /// final last = [1, 2, 3, 4].lastOrNull; // 4
-  /// final emptyLast = [].firstOrNull; // null
-  /// ```
-  E? get lastOrNull => isNotEmpty ? last : null;
-}
-
 extension IterableLastOrElse<E> on Iterable<E> {
   /// Last element or `defaultValue` if the collection is empty.
-  E lastOrElse(E defaultValue) =>
-      IterableLastOrNull(this).lastOrNull ?? defaultValue;
+  E lastOrElse(E defaultValue) => lastOrNull ?? defaultValue;
 }
 
 extension IterableLastOrNullWhere<E> on Iterable<E> {
@@ -196,10 +175,10 @@ extension IterableSlice<E> on Iterable<E> {
 extension IterableForEachIndexed<E> on Iterable<E> {
   /// Performs the given [action] on each element, providing sequential index
   /// with the element.
-  void forEachIndexed(void Function(E element, int index) action) {
+  void forEachIndexed(void Function(int index, E element) action) {
     var index = 0;
     for (final element in this) {
-      action(element, index++);
+      action(index++, element);
     }
   }
 }
@@ -589,7 +568,7 @@ extension IterableFilter<E> on Iterable<E> {
 
 extension IterableFilterIndexed<E> on Iterable<E> {
   /// Returns all elements that satisfy the given [predicate].
-  Iterable<E> filterIndexed(bool Function(E element, int index) predicate) =>
+  Iterable<E> filterIndexed(bool Function(int index, E element) predicate) =>
       IterableWhereIndexed(this).whereIndexed(predicate);
 }
 
@@ -605,7 +584,7 @@ extension IterableFilterIndexedTo<E> on Iterable<E> {
   /// [destination].
   void filterIndexedTo(
     List<E> destination,
-    bool Function(E element, int index) predicate,
+    bool Function(int index, E element) predicate,
   ) =>
       whereIndexedTo(destination, predicate);
 }
@@ -613,13 +592,13 @@ extension IterableFilterIndexedTo<E> on Iterable<E> {
 extension IterableFilterNot<E> on Iterable<E> {
   /// Returns all elements not matching the given [predicate].
   Iterable<E> filterNot(bool Function(E element) predicate) =>
-      IterableWhereNot(this).whereNot(predicate);
+      whereNot(predicate);
 }
 
 extension IterableFilterNotIndexed<E> on Iterable<E> {
   /// Returns all elements not matching the given [predicate].
-  Iterable<E> filterNotIndexed(bool Function(E element, int index) predicate) =>
-      IterableWhereNotIndexed(this).whereNotIndexed(predicate);
+  Iterable<E> filterNotIndexed(bool Function(int index, E element) predicate) =>
+      whereNotIndexed(predicate);
 }
 
 extension IterableFilterNotTo<E> on Iterable<E> {
@@ -634,7 +613,7 @@ extension IterableFilterNotToIndexed<E> on Iterable<E> {
   /// [destination].
   void filterNotToIndexed(
     List<E> destination,
-    bool Function(E element, int index) predicate,
+    bool Function(int index, E element) predicate,
   ) =>
       whereNotToIndexed(destination, predicate);
 }
@@ -647,11 +626,11 @@ extension IterableFilterNotNull<E> on Iterable<E?> {
 extension IterableWhereIndexed<E> on Iterable<E> {
   /// Returns all elements that satisfy the given [predicate].
   Iterable<E> whereIndexed(
-    bool Function(E element, int index) predicate,
+    bool Function(int index, E element) predicate,
   ) sync* {
     var index = 0;
     for (final element in this) {
-      if (predicate(element, index++)) {
+      if (predicate(index++, element)) {
         yield element;
       }
     }
@@ -675,37 +654,12 @@ extension IterableWhereIndexedTo<E> on Iterable<E> {
   /// [destination].
   void whereIndexedTo(
     List<E> destination,
-    bool Function(E element, int index) predicate,
+    bool Function(int index, E element) predicate,
   ) {
     var index = 0;
     for (final element in this) {
-      if (predicate(element, index++)) {
+      if (predicate(index++, element)) {
         destination.add(element);
-      }
-    }
-  }
-}
-
-extension IterableWhereNot<E> on Iterable<E> {
-  /// Returns all elements not matching the given [predicate].
-  Iterable<E> whereNot(bool Function(E element) predicate) sync* {
-    for (final element in this) {
-      if (!predicate(element)) {
-        yield element;
-      }
-    }
-  }
-}
-
-extension IterableWhereNotIndexed<E> on Iterable<E> {
-  /// Returns all elements not matching the given [predicate].
-  Iterable<E> whereNotIndexed(
-    bool Function(E element, int index) predicate,
-  ) sync* {
-    var index = 0;
-    for (final element in this) {
-      if (!predicate(element, index++)) {
-        yield element;
       }
     }
   }
@@ -728,11 +682,11 @@ extension IterableWhereNotToIndexed<E> on Iterable<E> {
   /// [destination].
   void whereNotToIndexed(
     List<E> destination,
-    bool Function(E element, int index) predicate,
+    bool Function(int index, E element) predicate,
   ) {
     var index = 0;
     for (final element in this) {
-      if (!predicate(element, index++)) {
+      if (!predicate(index++, element)) {
         destination.add(element);
       }
     }

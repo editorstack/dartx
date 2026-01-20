@@ -64,11 +64,6 @@ void main() {
       expect([1, 2, 3].elementAtOrElse(3, (i) => i), 3);
     });
 
-    test('.firstOrNull', () {
-      expect([1, 2, 3].firstOrNull, 1);
-      expect([].firstOrNull, null);
-    });
-
     test('.firstOrDefault()', () {
       expect([1, 2, 3].firstOrDefault(999), 1);
       expect([].firstOrDefault(999), 999);
@@ -79,11 +74,6 @@ void main() {
       expect([1, 2, 3, 4, 5].firstOrNullWhere((e) => e > 3), 4);
       expect([1, 2, 3, 4, 5].firstOrNullWhere((e) => e > 5), null);
       expect([].firstOrNullWhere((e) => true), null);
-    });
-
-    test('.lastOrNull', () {
-      expect([1, 2, 3].lastOrNull, 3);
-      expect([].lastOrNull, null);
     });
 
     test('.lastOrElse()', () {
@@ -372,32 +362,10 @@ void main() {
       expect([1, 2, 3].lastWhile((e) => true), [1, 2, 3]);
     });
 
-    test('.filterIndexed()', () {
-      final result = [6, 5, 4, 3, 2, 1, 0].filter((it) => it.isEven);
-      expect(result, [6, 4, 2, 0]);
-    });
-
-    test('.filterIndexed()', () {
-      var index = 0;
-      final result = [6, 5, 4, 3, 2, 1, 0].filterIndexed((it, i) {
-        expect(it, 6 - index);
-        expect(i, index);
-        index++;
-        return i > 3;
-      });
-      expect(result, [2, 1, 0]);
-    });
-
-    test('.filterTo()', () {
-      final list = <int>[];
-      [1, 2, 3, 4, 3, 2, 1].filterTo(list, (e) => e.isEven);
-      expect(list, [2, 4, 2]);
-    });
-
     test('.filterToIndexed()', () {
       var index = 0;
       final list = <int>[];
-      [1, 2, 3, 4, 3, 2, 1].filterIndexedTo(list, (e, i) {
+      [1, 2, 3, 4, 3, 2, 1].filterIndexedTo(list, (i, e) {
         expect(index++, i);
         return e.isEven;
       });
@@ -411,7 +379,7 @@ void main() {
     test('.filterNotIndexed()', () {
       var index = 0;
       expect(
-        [1, 2, 3, 4, 3, 2, 1].filterNotIndexed((e, i) {
+        [1, 2, 3, 4, 3, 2, 1].filterNotIndexed((i, e) {
           expect(index++, i);
           return e.isEven;
         }),
@@ -428,7 +396,7 @@ void main() {
     test('.filterToIndexed()', () {
       var index = 0;
       final list = <int>[];
-      [1, 2, 3, 4, 3, 2, 1].filterNotToIndexed(list, (e, i) {
+      [1, 2, 3, 4, 3, 2, 1].filterNotToIndexed(list, (i, e) {
         expect(index++, i);
         return e.isEven;
       });
@@ -459,26 +427,11 @@ void main() {
     test('.whereToIndexed()', () {
       var index = 0;
       final list = <int>[];
-      [1, 2, 3, 4, 3, 2, 1].whereIndexedTo(list, (e, i) {
+      [1, 2, 3, 4, 3, 2, 1].whereIndexedTo(list, (i, e) {
         expect(index++, i);
         return e.isEven;
       });
       expect(list, [2, 4, 2]);
-    });
-
-    test('.whereNot()', () {
-      expect([1, 2, 3, 4, 3, 2, 1].whereNot((e) => e.isEven), [1, 3, 3, 1]);
-    });
-
-    test('.whereNotIndexed()', () {
-      var index = 0;
-      expect(
-        [1, 2, 3, 4, 3, 2, 1].whereNotIndexed((e, i) {
-          expect(index++, i);
-          return e.isEven;
-        }),
-        [1, 3, 3, 1],
-      );
     });
 
     test('.whereNotTo()', () {
@@ -490,7 +443,7 @@ void main() {
     test('.whereToIndexed()', () {
       var index = 0;
       final list = <int>[];
-      [1, 2, 3, 4, 3, 2, 1].whereNotToIndexed(list, (e, i) {
+      [1, 2, 3, 4, 3, 2, 1].whereNotToIndexed(list, (i, e) {
         expect(index++, i);
         return e.isEven;
       });

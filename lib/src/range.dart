@@ -69,19 +69,19 @@ extension ComparableRangeX<T extends Comparable<T>> on T {
 extension IntRangeToExtension on int {
   /// Creates a [IntRange] with a step count of 1
   ///
-  /// ```
+  /// ```dart
   /// 5.rangeTo(10).forEach(print);
   /// // 5, 6, 7, 8, 9, 10
   /// ```
   ///
   /// IntRanges also work downwards
-  /// ```
+  /// ```dart
   /// 10.rangeTo(5).forEach(print);
   /// // 10, 9, 8, 7, 6, 5
   /// ```
   ///
   /// The step size can be customized but is required to be positive
-  /// ```
+  /// ```dart
   /// 5.rangeTo(10).step(2).forEach(print);
   /// // 5, 7, 9
   /// 10.rangeTo(5).step(2).forEach(print);
